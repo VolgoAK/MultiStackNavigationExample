@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.singleactivityexample.R
 import com.example.singleactivityexample.extensions.observeSafe
+import com.example.singleactivityexample.extensions.toast
 import com.example.singleactivityexample.navigation.Navigator
 import com.example.singleactivityexample.navigation.PostScreen
 import com.example.singleactivityexample.screens.posts.adapter.PostItem
@@ -55,6 +56,9 @@ class PostsFragment : Fragment(R.layout.fragment_posts), FlexibleAdapter.OnItemC
             }
             is PostsViewModel.PostsScreenState.LoadingState -> {
                 refresh.isRefreshing = true
+            }
+            is PostsViewModel.PostsScreenState.ErrorState -> {
+                requireContext().toast(state.error)
             }
         }
     }

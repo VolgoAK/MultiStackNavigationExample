@@ -3,6 +3,7 @@ package com.example.singleactivityexample.screens.main
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.singleactivityexample.R
+import com.example.singleactivityexample.navigation.MyAppNavigator
 import com.example.singleactivityexample.navigation.Navigator
 import com.example.singleactivityexample.navigation.PostsScreen
 import org.koin.android.ext.android.inject
@@ -12,7 +13,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private val navigator by inject<Navigator>()
 
-    private val navigatorHolder = SupportAppNavigator(
+    private val navigatorHolder = MyAppNavigator(
         this,
         R.id.fragmentContainer
     )

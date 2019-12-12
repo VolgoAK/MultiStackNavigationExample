@@ -6,11 +6,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.singleactivityexample.R
+import com.example.singleactivityexample.extensions.*
 import com.example.singleactivityexample.navigation.WriteCommentScreen
-import com.example.singleactivityexample.extensions.getExtraNotNull
-import com.example.singleactivityexample.extensions.makeGone
-import com.example.singleactivityexample.extensions.makeVisible
-import com.example.singleactivityexample.extensions.observeSafe
 import com.example.singleactivityexample.model.Post
 import com.example.singleactivityexample.navigation.Navigator
 import com.example.singleactivityexample.screens.post.adapter.CommentItem
@@ -73,6 +70,9 @@ class PostFragment : Fragment(R.layout.fragment_post), FlexibleAdapter.OnItemCli
             }
             is PostViewModel.PostScreenState.PostState -> {
                 populatePost(state)
+            }
+            is PostViewModel.PostScreenState.ErrorState -> {
+                requireContext().toast(state.error)
             }
         }
     }

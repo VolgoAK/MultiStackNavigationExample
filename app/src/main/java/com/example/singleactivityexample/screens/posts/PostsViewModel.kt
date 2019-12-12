@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import com.example.singleactivityexample.domain.NewsApi
 import com.example.singleactivityexample.model.Post
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -22,6 +23,7 @@ class PostsViewModel(
         flow { emit(api.getAllPosts()) }
             .map<List<Post>, PostsScreenState> { PostsScreenState.PostsLoadedState(it) }
             .onStart { emit(PostsScreenState.LoadingState) }
+            .catch { emit(PostsScreenState.ErrorState(it.message ?: "error")) }
             .asLiveData()
     }
 
