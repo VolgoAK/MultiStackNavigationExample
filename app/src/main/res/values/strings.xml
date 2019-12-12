@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">SingleActivityExample</string>
+
+    <string name="placeholder_text">Bacon ipsum dolor amet brisket meatloaf short loin,
+    picanha sausage pastrami tail shank leberkas rump ribeye jerky ball tip strip steak
+    ground round. Andouille corned beef pork loin capicola chicken rump. </string>
+
+    <string name="date_placeholder">10 Feb 1984</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="write_comment">Write comment</string>
+    <string name="done">Done</string>
+</resources>

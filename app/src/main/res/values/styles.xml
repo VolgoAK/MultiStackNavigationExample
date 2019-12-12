@@ -1,0 +1,49 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="PostActivityTheme" parent="AppTheme">
+        <item name="android:windowBackground">@color/colorWhite</item>
+    </style>
+
+    <style name="SplashScreenTheme" parent="AppTheme">
+        <item name="android:windowFullscreen">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/colorGreen</item>
+    </style>
+
+    <style name="TitleTextStyle">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/title_text_size</item>
+    </style>
+
+    <style name="SubtitleTextStyle" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="ContentTextStyle" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="SecondaryTextStyle" parent="TextAppearance.AppCompat.Small">
+
+    </style>
+
+    <style name="AppBarStyle" parent="@style/Widget.Design.AppBarLayout">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:elevation">8dp</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@color/colorWhite</item>
+    </style>
+
+</resources>
