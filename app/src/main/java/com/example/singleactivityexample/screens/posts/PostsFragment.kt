@@ -6,8 +6,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.singleactivityexample.R
-import com.example.singleactivityexample.extensions.makeGone
-import com.example.singleactivityexample.extensions.makeVisible
 import com.example.singleactivityexample.extensions.observeSafe
 import com.example.singleactivityexample.navigation.Navigator
 import com.example.singleactivityexample.navigation.PostScreen
@@ -32,7 +30,9 @@ class PostsFragment : Fragment(R.layout.fragment_posts), FlexibleAdapter.OnItemC
         rvPosts.layoutManager = LinearLayoutManager(requireContext())
         rvPosts.adapter = adapter
 
-        viewModel.postsLiveData.observeSafe(viewLifecycleOwner, ::onNewState)
+        refresh.setOnRefreshListener { viewModel.refreshData() }
+
+        viewModel.stateLiveData.observeSafe(viewLifecycleOwner, ::onNewState)
     }
 
     override fun onItemClick(view: View?, position: Int): Boolean {
@@ -48,13 +48,13 @@ class PostsFragment : Fragment(R.layout.fragment_posts), FlexibleAdapter.OnItemC
     }
 
     private fun onNewState(state: PostsViewModel.PostsScreenState) {
-        when(state) {
+        when (state) {
             is PostsViewModel.PostsScreenState.PostsLoadedState -> {
-                progress.makeGone()
+                refresh.isRefreshing = false
                 adapter.updateDataSet(state.posts.map { PostItem(it) })
             }
             is PostsViewModel.PostsScreenState.LoadingState -> {
-                progress.makeVisible()
+                refresh.isRefreshing = true
             }
         }
     }

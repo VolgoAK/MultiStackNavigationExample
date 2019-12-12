@@ -2,11 +2,11 @@ package com.example.singleactivityexample.screens.post
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.liveData
 import com.example.singleactivityexample.domain.NewsApi
 import com.example.singleactivityexample.model.Comment
 import com.example.singleactivityexample.model.Post
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
 
 class PostViewModel(
     private val post: Post,
@@ -15,16 +15,11 @@ class PostViewModel(
 
     val title = post.title
 
-    val state = liveData {
-        emit(PostScreenState.LoadingState)
-    }
-
-    val stateLiveData = flow {
-        emit(api.getCommentsByPostId(post.id))
-    }.map<List<Comment>, PostScreenState> {
-        PostScreenState.PostState(post, it)
+    val stateLiveData = flow<PostScreenState> {
+        val comments = api.getCommentsByPostId(post.id)
+        emit(PostScreenState.PostState(post, comments))
     }.onStart {
-        PostScreenState.LoadingState
+        emit(PostScreenState.LoadingState)
     }.asLiveData()
 
     fun onWriteNewCommentClicked() {
