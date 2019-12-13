@@ -1,13 +1,11 @@
 package com.example.singleactivityexample.navigation
 
 import ru.terrakok.cicerone.Cicerone
-import ru.terrakok.cicerone.android.support.SupportAppNavigator
-import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 class Navigator {
     private val cicerone by lazy { Cicerone.create() }
 
-    fun setNavigator(navigator: SupportAppNavigator) {
+    fun setNavigator(navigator: MyAppNavigator) {
         cicerone.navigatorHolder.setNavigator(navigator)
     }
 
@@ -15,15 +13,15 @@ class Navigator {
         cicerone.navigatorHolder.removeNavigator()
     }
 
-    fun navigateTo(screen: SupportAppScreen) {
+    fun navigateTo(screen: MyAppScreen) {
         cicerone.router.navigateTo(screen)
     }
 
-    fun backTo(screen: SupportAppScreen) {
+    fun backTo(screen: MyAppScreen) {
         cicerone.router.backTo(screen)
     }
 
-    fun setRootScreen(screen: SupportAppScreen) {
+    fun setRootScreen(screen: MyAppScreen) {
         cicerone.router.newRootScreen(screen)
     }
 }

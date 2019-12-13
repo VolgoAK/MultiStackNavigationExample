@@ -40,7 +40,8 @@ class PostsFragment : Fragment(R.layout.fragment_posts), FlexibleAdapter.OnItemC
         return when (val item = adapter.currentItems[position]) {
             is PostItem -> {
                 navigator.navigateTo(
-                    PostScreen(item.post)
+                    PostScreen(item.post.id)
+                        .withFadeInOutAnimation()
                 )
                 true
             }

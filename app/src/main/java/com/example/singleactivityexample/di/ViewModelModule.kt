@@ -12,5 +12,5 @@ val viewModelModule = module {
             get()
         )
     }
-    viewModel { (post: Post) -> PostViewModel(post, get()) }
+    viewModel { (postId: Long) -> PostViewModel(postId, get()) }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import com.example.singleactivityexample.domain.NewsApi
+import com.example.singleactivityexample.domain.NewsRepository
 import com.example.singleactivityexample.model.Post
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -12,7 +13,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
 class PostsViewModel(
-    private val api: NewsApi
+    private val api: NewsRepository
 ) : ViewModel() {
 
     private val refreshLiveData = MutableLiveData<Boolean>().apply {

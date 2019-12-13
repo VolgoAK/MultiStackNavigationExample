@@ -30,9 +30,9 @@ class PostFragment : Fragment(R.layout.fragment_post), FlexibleAdapter.OnItemCli
     companion object {
         private const val EXTRA_POST = "extra_post"
 
-        fun newInstance(post: Post) = PostFragment().apply {
+        fun newInstance(postId: Long) = PostFragment().apply {
             arguments = Bundle().apply {
-                putParcelable(EXTRA_POST, post)
+                putLong(EXTRA_POST, postId)
             }
         }
     }
@@ -51,7 +51,6 @@ class PostFragment : Fragment(R.layout.fragment_post), FlexibleAdapter.OnItemCli
             setNavigationOnClickListener {
                 requireActivity().onBackPressed()
             }
-            title = viewModel.title
         }
 
         with(rvPost) {
@@ -81,6 +80,8 @@ class PostFragment : Fragment(R.layout.fragment_post), FlexibleAdapter.OnItemCli
         progress.makeGone()
         rvPost.makeVisible()
 
+        toolbar.title = postState.post.title
+
         val items = mutableListOf<IFlexible<*>>()
         items.add(PostContentItem(postState.post))
         items.addAll(postState.comments.map { CommentItem(it) })
@@ -92,7 +93,9 @@ class PostFragment : Fragment(R.layout.fragment_post), FlexibleAdapter.OnItemCli
         return when(val item = postAdapter.currentItems[position]) {
             is NewCommentItem -> {
                 viewModel.onWriteNewCommentClicked()
-                navigator.navigateTo(WriteCommentScreen())
+                navigator.navigateTo(
+                    WriteCommentScreen()
+                )
                 true
             }
             else -> false

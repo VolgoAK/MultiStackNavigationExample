@@ -3,6 +3,7 @@ package com.example.singleactivityexample.navigation
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import com.example.singleactivityexample.extensions.getExtra
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import ru.terrakok.cicerone.commands.Command
 
@@ -15,9 +16,10 @@ class MyAppNavigator(activity: FragmentActivity, containerId: Int) :
         nextFragment: Fragment?,
         fragmentTransaction: FragmentTransaction?
     ) {
-        fragmentTransaction?.setCustomAnimations(
-            android.R.animator.fade_in, android.R.animator.fade_out,
-            android.R.animator.fade_in, android.R.animator.fade_out
-        )
+        nextFragment?.getExtra<CustomAnimation>(CustomSupportScreen.ARG_ANIMATION)?.let { anim ->
+            fragmentTransaction?.setCustomAnimations(
+                anim.enter, anim.exit, anim.popEnter, anim.popExit
+            )
+        }
     }
 }

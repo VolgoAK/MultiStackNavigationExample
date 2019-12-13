@@ -2,6 +2,7 @@ package com.example.singleactivityexample.di
 
 import com.example.singleactivityexample.BuildConfig
 import com.example.singleactivityexample.domain.NewsApi
+import com.example.singleactivityexample.domain.NewsRepository
 import com.example.singleactivityexample.navigation.Navigator
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
@@ -54,6 +55,8 @@ val appModule = module {
     single<NewsApi> {
         get<Retrofit>().create(NewsApi::class.java)
     }
+
+    single { NewsRepository(get()) }
 
     single { Navigator() }
 }
