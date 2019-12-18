@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.singleactivityexample.R
 import com.example.singleactivityexample.extensions.*
+import com.example.singleactivityexample.model.Comment
 import com.example.singleactivityexample.navigation.WriteCommentScreen
 import com.example.singleactivityexample.model.Post
 import com.example.singleactivityexample.navigation.Navigator
@@ -62,30 +63,23 @@ class PostFragment : Fragment(R.layout.fragment_post), FlexibleAdapter.OnItemCli
         viewModel.stateLiveData.observeSafe(viewLifecycleOwner, ::onNewState)
     }
 
-    private fun onNewState(state: PostViewModel.PostScreenState) {
-        when(state) {
-            is PostViewModel.PostScreenState.LoadingState -> {
-                progress.makeVisible()
-                rvPost.makeGone()
-            }
-            is PostViewModel.PostScreenState.PostState -> {
-                populatePost(state)
-            }
-            is PostViewModel.PostScreenState.ErrorState -> {
-                requireContext().toast(state.error)
-            }
-        }
+    private fun onNewState(state: PostScreenState) {
+        rvPost.setVisibility(!state.loading)
+        progress.setVisibility(state.loading)
+
+        populatePost(state.post, state.comments)
+
+        state.error?.let { requireContext().toast(it) }
     }
 
-    private fun populatePost(postState: PostViewModel.PostScreenState.PostState) {
-        progress.makeGone()
-        rvPost.makeVisible()
-
-        toolbar.title = postState.post.title
+    private fun populatePost(post: Post?, comments: List<Comment>) {
+        toolbar.title = post?.title ?: ""
 
         val items = mutableListOf<IFlexible<*>>()
-        items.add(PostContentItem(postState.post))
-        items.addAll(postState.comments.map { CommentItem(it) })
+        if(post != null) {
+            items.add(PostContentItem(post))
+        }
+        items.addAll(comments.map { CommentItem(it) })
         items.add(NewCommentItem())
         postAdapter.updateDataSet(items)
     }

@@ -1,9 +1,6 @@
 package com.example.singleactivityexample.screens.posts
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.example.singleactivityexample.domain.NewsApi
 import com.example.singleactivityexample.domain.NewsRepository
 import com.example.singleactivityexample.model.Post
@@ -20,21 +17,22 @@ class PostsViewModel(
         value = true
     }
 
-    val stateLiveData = refreshLiveData.switchMap {
+    private val postsLoadingLiveData = refreshLiveData.switchMap {
         flow { emit(api.getAllPosts()) }
-            .map<List<Post>, PostsScreenState> { PostsScreenState.PostsLoadedState(it) }
-            .onStart { emit(PostsScreenState.LoadingState) }
-            .catch { emit(PostsScreenState.ErrorState(it.message ?: "error")) }
+            .map<List<Post>, PostsScreenPartialState> { PostsScreenPartialState.PostsLoadedState(it) }
+            .onStart { emit(PostsScreenPartialState.LoadingState) }
+            .catch { emit(PostsScreenPartialState.ErrorState(it.message ?: "error")) }
             .asLiveData()
+    }
+
+    private val state = PostsScreenState()
+    val stateLiveData = Transformations.map(postsLoadingLiveData) {
+        it.applyToState(state)
     }
 
     fun refreshData() {
         refreshLiveData.value = true
     }
 
-    sealed class PostsScreenState {
-        object LoadingState : PostsScreenState()
-        data class PostsLoadedState(val posts: List<Post>) : PostsScreenState()
-        data class ErrorState(val error: String) : PostsScreenState()
-    }
+
 }

@@ -49,7 +49,8 @@ class PostsFragment : Fragment(R.layout.fragment_posts), FlexibleAdapter.OnItemC
         }
     }
 
-    private fun onNewState(state: PostsViewModel.PostsScreenState) {
+    private fun onNewState(state: PostsScreenState) {
+        /*    private fun onNewState(state: PostsViewModel.PostsScreenState) {
         when (state) {
             is PostsViewModel.PostsScreenState.PostsLoadedState -> {
                 refresh.isRefreshing = false
@@ -61,6 +62,12 @@ class PostsFragment : Fragment(R.layout.fragment_posts), FlexibleAdapter.OnItemC
             is PostsViewModel.PostsScreenState.ErrorState -> {
                 requireContext().toast(state.error)
             }
+        }
+*/
+        refresh.isRefreshing = state.loading
+        adapter.updateDataSet(state.posts.map { PostItem(it) })
+        state.errorMessage?.let {
+            requireContext().toast(it)
         }
     }
 }
