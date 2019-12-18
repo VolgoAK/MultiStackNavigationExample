@@ -1,8 +1,10 @@
 package com.example.singleactivityexample.navigation
 
+import androidx.fragment.app.Fragment
 import com.example.singleactivityexample.screens.newComment.NewCommentFragment
 import com.example.singleactivityexample.screens.post.PostFragment
 import com.example.singleactivityexample.screens.posts.PostsFragment
+import com.example.singleactivityexample.screens.users.UsersFragment
 
 sealed class MyAppScreen : CustomSupportScreen() {
     fun withFadeInOutAnimation(): MyAppScreen {
@@ -24,4 +26,8 @@ class PostScreen(private val postId: Long) : MyAppScreen() {
 
 class WriteCommentScreen() : MyAppScreen() {
     override fun createFragment() = NewCommentFragment()
+}
+
+class UsersScreen(): MyAppScreen() {
+    override fun createFragment() = UsersFragment()
 }
