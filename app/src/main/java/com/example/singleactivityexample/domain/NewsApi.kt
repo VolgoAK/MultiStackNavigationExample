@@ -1,5 +1,6 @@
 package com.example.singleactivityexample.domain
 
+import com.example.singleactivityexample.model.Album
 import com.example.singleactivityexample.model.Comment
 import com.example.singleactivityexample.model.Post
 import com.example.singleactivityexample.model.User
@@ -23,4 +24,7 @@ interface NewsApi {
 
     @GET(value = "users/{id}")
     suspend fun getUserById(@Path("id") id: Long): User
+
+    @GET(value = "albums")
+    suspend fun getAllAlbums(): List<Album>
 }

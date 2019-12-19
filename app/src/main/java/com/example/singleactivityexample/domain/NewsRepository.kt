@@ -11,4 +11,6 @@ class NewsRepository(private  val api: NewsApi) {
     suspend fun getAllUsers() = api.getUsers()
 
     suspend fun getUserById(id: Long) = api.getUserById(id)
+
+    suspend fun getAllAlbums() = api.getAllAlbums()
 }

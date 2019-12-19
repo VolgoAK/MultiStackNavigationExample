@@ -1,5 +1,6 @@
 package com.example.singleactivityexample.di
 
+import com.example.singleactivityexample.screens.albums.AlbumsViewModel
 import com.example.singleactivityexample.screens.post.PostViewModel
 import com.example.singleactivityexample.screens.posts.PostsViewModel
 import com.example.singleactivityexample.screens.users.UsersViewModel
@@ -15,4 +16,6 @@ val viewModelModule = module {
     viewModel { (postId: Long) -> PostViewModel(postId, get()) }
 
     viewModel { UsersViewModel(get()) }
+
+    viewModel { AlbumsViewModel(get()) }
 }

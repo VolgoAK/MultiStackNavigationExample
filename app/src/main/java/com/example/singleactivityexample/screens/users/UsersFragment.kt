@@ -15,6 +15,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UsersFragment : Fragment(R.layout.fragment_users), FlexibleAdapter.OnItemClickListener {
 
+    companion object {
+        fun newInstance() = UsersFragment()
+    }
+
     private val adapter = FlexibleAdapter(emptyList(), this)
     private val viewModel by viewModel<UsersViewModel>()
 

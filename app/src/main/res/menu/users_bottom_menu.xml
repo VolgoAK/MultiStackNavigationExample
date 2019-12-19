@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/users"
+        android:id="@+id/navigationItemUsers"
         android:title="@string/users" />
 
     <item
-        android:id="@+id/albums"
+        android:id="@+id/navigationItemAlbums"
         android:title="@string/albums" />
 
 </menu>

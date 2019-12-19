@@ -7,7 +7,7 @@ import com.example.singleactivityexample.extensions.getExtra
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import ru.terrakok.cicerone.commands.Command
 
-class MyAppNavigator(activity: FragmentActivity, containerId: Int) :
+open class MyAppNavigator(activity: FragmentActivity, containerId: Int) :
     SupportAppNavigator(activity, containerId) {
 
     override fun setupFragmentTransaction(

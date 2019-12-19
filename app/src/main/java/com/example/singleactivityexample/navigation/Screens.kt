@@ -1,9 +1,11 @@
 package com.example.singleactivityexample.navigation
 
 import androidx.fragment.app.Fragment
+import com.example.singleactivityexample.screens.albums.AlbumsFragment
 import com.example.singleactivityexample.screens.newComment.NewCommentFragment
 import com.example.singleactivityexample.screens.post.PostFragment
 import com.example.singleactivityexample.screens.posts.PostsFragment
+import com.example.singleactivityexample.screens.usermain.UsersMainFragment
 import com.example.singleactivityexample.screens.users.UsersFragment
 
 sealed class MyAppScreen : CustomSupportScreen() {
@@ -30,4 +32,12 @@ class WriteCommentScreen() : MyAppScreen() {
 
 class UsersScreen(): MyAppScreen() {
     override fun createFragment() = UsersFragment()
+}
+
+class AlbumsScreen(): MyAppScreen() {
+    override fun createFragment() = AlbumsFragment()
+}
+
+class UsersMainScreen(): MyAppScreen() {
+    override fun createFragment() = UsersMainFragment.newInstance()
 }
