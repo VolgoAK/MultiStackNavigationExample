@@ -19,8 +19,11 @@ class PostsViewModel(
 
     private val postsLoadingLiveData = refreshLiveData.switchMap {
         flow { emit(api.getAllPosts()) }
-            .map<List<Post>, PostsScreenPartialState> { PostsScreenPartialState.PostsLoadedState(it) }
-            .onStart { emit(PostsScreenPartialState.LoadingState) }
+            .map<List<Post>, PostsScreenPartialState> {
+                PostsScreenPartialState.PostsLoadedState(it)
+                    .chain(PostsScreenPartialState.LoadingState(false))
+            }
+            .onStart { emit(PostsScreenPartialState.LoadingState(true)) }
             .catch { emit(PostsScreenPartialState.ErrorState(it.message ?: "error")) }
             .asLiveData()
     }

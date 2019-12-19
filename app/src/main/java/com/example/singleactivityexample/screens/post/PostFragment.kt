@@ -11,6 +11,7 @@ import com.example.singleactivityexample.model.Comment
 import com.example.singleactivityexample.navigation.WriteCommentScreen
 import com.example.singleactivityexample.model.Post
 import com.example.singleactivityexample.navigation.Navigator
+import com.example.singleactivityexample.navigation.UsersMainScreen
 import com.example.singleactivityexample.navigation.UsersScreen
 import com.example.singleactivityexample.screens.post.adapter.CommentItem
 import com.example.singleactivityexample.screens.post.adapter.NewCommentItem
@@ -94,7 +95,7 @@ class PostFragment : Fragment(R.layout.fragment_post), FlexibleAdapter.OnItemCli
                 true
             }
             is CommentItem -> {
-                navigator.navigateTo(UsersScreen())
+                navigator.navigateTo(UsersMainScreen())
                 true
             }
             else -> false

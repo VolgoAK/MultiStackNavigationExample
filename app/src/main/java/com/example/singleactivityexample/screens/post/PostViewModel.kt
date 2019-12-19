@@ -2,6 +2,7 @@ package com.example.singleactivityexample.screens.post
 
 import androidx.lifecycle.*
 import com.example.singleactivityexample.domain.NewsRepository
+import com.example.singleactivityexample.screens.posts.PostsScreenPartialState
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -19,9 +20,12 @@ class PostViewModel(
     private val postsLoadingLiveData = flow<PostPartialState> {
         val post = viewModelScope.async { api.getPostById(postId) }
         val comments = viewModelScope.async { api.getPostComments(postId) }
-        emit(PostPartialState.PostWithComment(post.await(), comments.await()))
+        emit(
+            PostPartialState.PostWithComment(post.await(), comments.await())
+                .chain(PostPartialState.Loading(false))
+        )
     }.onStart {
-        emit(PostPartialState.Loading)
+        emit(PostPartialState.Loading(true))
     }.catch { error ->
         emit(
             PostPartialState.ErrorState(error.message ?: "someError")
@@ -35,5 +39,4 @@ class PostViewModel(
     fun onWriteNewCommentClicked() {
 
     }
-
 }
