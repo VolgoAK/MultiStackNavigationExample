@@ -1,18 +1,22 @@
 package com.example.singleactivityexample.screens.usermain
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.singleactivityexample.R
+import com.example.singleactivityexample.base.BackButtonListener
+import com.example.singleactivityexample.base.nestendcontainer.ContainerFragment
+import com.example.singleactivityexample.navigation.AlbumsScreen
+import com.example.singleactivityexample.navigation.UsersScreen
 import com.example.singleactivityexample.screens.albums.AlbumsFragment
 import com.example.singleactivityexample.screens.users.UsersFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_users_main.*
 
-class UsersMainFragment : Fragment(R.layout.fragment_users_main), BottomNavigationView.OnNavigationItemSelectedListener {
+class UsersMainFragment : Fragment(R.layout.fragment_users_main),
+    BottomNavigationView.OnNavigationItemSelectedListener,
+    BackButtonListener {
 
     companion object {
         private const val TAG_ALBUMS = "tag_albums"
@@ -24,14 +28,14 @@ class UsersMainFragment : Fragment(R.layout.fragment_users_main), BottomNavigati
         super.onViewCreated(view, savedInstanceState)
         bottomNav.setOnNavigationItemSelectedListener(this)
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             bottomNav.selectedItemId = R.id.navigationItemUsers
             setCurrentFragment(TAG_USERS)
         }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
+        return when (item.itemId) {
             R.id.navigationItemUsers -> {
                 setCurrentFragment(TAG_USERS)
                 true
@@ -48,15 +52,15 @@ class UsersMainFragment : Fragment(R.layout.fragment_users_main), BottomNavigati
         val fragmentManager = childFragmentManager
         var currentFragment: Fragment? = null
         fragmentManager.fragments.forEach { fragment ->
-            if(fragment.isVisible) currentFragment = fragment
+            if (fragment.isVisible) currentFragment = fragment
         }
 
         var newFragment = fragmentManager.findFragmentByTag(tag)
-        if(currentFragment != null && newFragment != null && currentFragment == newFragment) return
+        if (currentFragment != null && newFragment != null && currentFragment == newFragment) return
 
         val transaction = fragmentManager.beginTransaction()
 
-        if(newFragment == null) {
+        if (newFragment == null) {
             transaction.add(R.id.usersMainContainer, createFragment(tag), tag)
         }
 
@@ -66,10 +70,43 @@ class UsersMainFragment : Fragment(R.layout.fragment_users_main), BottomNavigati
         transaction.commitNow()
     }
 
+    override fun onBackPressed(): Boolean {
+        return ((childFragmentManager.findFragmentById(R.id.usersMainContainer) as? BackButtonListener)
+            ?.onBackPressed() ?: false) || popMainStack()
+    }
+
+    private fun popMainStack(): Boolean {
+        val fragmentManager = childFragmentManager
+        var currentFragment: Fragment? = null
+        var topFragmentInStack: Fragment? = null
+        fragmentManager.fragments.forEach { fragment ->
+            if (isTopFragment(fragment)) {
+                if (fragment.isVisible) {
+                    currentFragment = fragment
+                } else {
+                    topFragmentInStack = fragment
+                }
+            }
+        }
+
+        if (topFragmentInStack == null || currentFragment == null) return false
+        val transition = fragmentManager.beginTransaction()
+        transition.remove(currentFragment!!)
+        transition.show(topFragmentInStack!!)
+
+        transition.commitNow()
+        return true
+    }
+
+    private fun isTopFragment(fragment: Fragment): Boolean {
+        return fragment is ContainerFragment
+    }
+
     private fun createFragment(tag: String): Fragment {
-        return when(tag) {
-            TAG_ALBUMS -> AlbumsFragment.newInstance()
-            TAG_USERS -> UsersFragment.newInstance()
+        val scopeName = "Scope:$tag"
+        return when (tag) {
+            TAG_ALBUMS -> ContainerFragment.newInstance(scopeName, AlbumsScreen(scopeName))
+            TAG_USERS -> ContainerFragment.newInstance(scopeName, UsersScreen(scopeName))
             else -> throw IllegalArgumentException("Unsupported tag $tag")
         }
     }

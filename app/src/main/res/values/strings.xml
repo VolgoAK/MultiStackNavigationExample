@@ -13,4 +13,6 @@
     <string name="done">Done</string>
     <string name="users">Users</string>
     <string name="albums">Albums</string>
+    <string name="fake_user_name">John Smith</string>
+    <string name="news">news</string>
 </resources>

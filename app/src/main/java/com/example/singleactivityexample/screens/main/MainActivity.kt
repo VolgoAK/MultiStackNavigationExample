@@ -3,6 +3,7 @@ package com.example.singleactivityexample.screens.main
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.singleactivityexample.R
+import com.example.singleactivityexample.base.BackButtonListener
 import com.example.singleactivityexample.navigation.MyAppNavigator
 import com.example.singleactivityexample.navigation.Navigator
 import com.example.singleactivityexample.navigation.PostsScreen
@@ -33,5 +34,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onPause() {
         super.onPause()
         navigator.removeNavigator()
+    }
+
+    override fun onBackPressed() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+        val backHandled = (fragment as? BackButtonListener)?.onBackPressed() ?: false
+        if(!backHandled) super.onBackPressed()
     }
 }

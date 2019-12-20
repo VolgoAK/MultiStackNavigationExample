@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/navigationItemPosts"
+        android:title="@string/news"
+        android:icon="@drawable/ic_post"/>
+
+    <item
         android:id="@+id/navigationItemUsers"
-        android:title="@string/users" />
+        android:title="@string/users"
+        android:icon="@drawable/ic_face"/>
 
     <item
         android:id="@+id/navigationItemAlbums"
-        android:title="@string/albums" />
+        android:title="@string/albums"
+        android:icon="@drawable/ic_album"/>
 
 </menu>

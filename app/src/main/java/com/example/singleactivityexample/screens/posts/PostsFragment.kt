@@ -10,6 +10,7 @@ import com.example.singleactivityexample.extensions.observeSafe
 import com.example.singleactivityexample.extensions.toast
 import com.example.singleactivityexample.navigation.Navigator
 import com.example.singleactivityexample.navigation.PostScreen
+import com.example.singleactivityexample.navigation.UsersMainScreen
 import com.example.singleactivityexample.screens.posts.adapter.PostItem
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import kotlinx.android.synthetic.main.fragment_posts.*

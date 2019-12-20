@@ -1,28 +1,38 @@
 package com.example.singleactivityexample.screens.albums
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.singleactivityexample.R
+import com.example.singleactivityexample.extensions.getExtraNotNull
 import com.example.singleactivityexample.extensions.observeSafe
 import com.example.singleactivityexample.extensions.setVisibility
 import com.example.singleactivityexample.extensions.toast
+import com.example.singleactivityexample.navigation.AlbumScreen
+import com.example.singleactivityexample.navigation.Navigator
 import com.example.singleactivityexample.screens.albums.adapter.ItemAlbum
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import kotlinx.android.synthetic.main.fragment_albums.*
+import org.koin.android.ext.android.getKoin
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AlbumsFragment : Fragment(R.layout.fragment_albums) {
+class AlbumsFragment : Fragment(R.layout.fragment_albums), FlexibleAdapter.OnItemClickListener {
 
     companion object {
-        fun newInstance() = AlbumsFragment()
+        private const val EXTRA_SCOPE_ID = "extra_scope_id"
+        fun newInstance(scopeId: String) = AlbumsFragment().apply {
+            arguments = Bundle().apply {
+                putString(EXTRA_SCOPE_ID, scopeId)
+            }
+        }
     }
 
     private val viewModel by viewModel<AlbumsViewModel>()
-    private val albumsAdapter = FlexibleAdapter(emptyList())
+    private val albumsAdapter = FlexibleAdapter(emptyList(), this)
+
+    private val scope by lazy { getKoin().getScope(getExtraNotNull(EXTRA_SCOPE_ID)) }
+    private val navigator by lazy { scope.get<Navigator>() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,5 +52,15 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
         )
 
         state.error?.let { requireContext().toast(it) }
+    }
+
+    override fun onItemClick(view: View?, position: Int): Boolean {
+        return when(val item = albumsAdapter.getItem(position)) {
+            is ItemAlbum -> {
+                navigator.navigateTo(AlbumScreen())
+                true
+            }
+            else -> false
+        }
     }
 }
