@@ -3,6 +3,7 @@ package com.example.singleactivityexample.screens.main
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import com.example.singleactivityexample.R
 import com.example.singleactivityexample.base.BackButtonListener
@@ -11,7 +12,9 @@ import com.example.singleactivityexample.navigation.AlbumsScreen
 import com.example.singleactivityexample.navigation.PostsScreen
 import com.example.singleactivityexample.navigation.UsersScreen
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_users_main.*
+import timber.log.Timber
 
 class UsersMainFragment : Fragment(R.layout.fragment_users_main),
     BottomNavigationView.OnNavigationItemSelectedListener,
@@ -75,10 +78,15 @@ class UsersMainFragment : Fragment(R.layout.fragment_users_main),
         transaction.commitNow()
     }
 
+    // todo shit from the cicerone example won't work 
+    // we have many fragments with same container id, and fragment manager will just return us 
+    // first in a list
     override fun onBackPressed(): Boolean {
-        return ((childFragmentManager.findFragmentById(R.id.usersMainContainer) as? BackButtonListener)
-            ?.onBackPressed() ?: false) || popMainStack()
+        return getVisibleContainerFragment()?.onBackPressed() ?: false || popMainStack()
     }
+
+    private fun getVisibleContainerFragment(): ContainerFragment? = childFragmentManager.fragments
+        .find { it is ContainerFragment && it.isVisible } as? ContainerFragment
 
     private fun popMainStack(): Boolean {
         val fragmentManager = childFragmentManager
@@ -100,7 +108,26 @@ class UsersMainFragment : Fragment(R.layout.fragment_users_main),
         transition.show(topFragmentInStack!!)
 
         transition.commitNow()
+
+        changeBottomSelection(topFragmentInStack as ContainerFragment)
         return true
+    }
+
+    private fun changeBottomSelection(fragment: ContainerFragment) {
+        val targetItemID = when (fragment.pageTag) {
+            TAG_NEWS -> R.id.navigationItemPosts
+            TAG_ALBUMS -> R.id.navigationItemAlbums
+            TAG_USERS -> R.id.navigationItemUsers
+            else -> return
+        }
+
+        bottomNav.menu.iterator()
+            .forEach {
+                val checked = it.itemId == targetItemID
+                // Change selection only for item which should be selected now
+                // it.isChecked = checked - won't work
+                if(checked) it.isChecked = true
+            }
     }
 
     private fun isTopFragment(fragment: Fragment): Boolean {
@@ -110,9 +137,9 @@ class UsersMainFragment : Fragment(R.layout.fragment_users_main),
     private fun createFragment(tag: String): Fragment {
         val scopeName = "Scope:$tag"
         return when (tag) {
-            TAG_ALBUMS -> ContainerFragment.newInstance(scopeName, AlbumsScreen(scopeName))
-            TAG_USERS -> ContainerFragment.newInstance(scopeName, UsersScreen(scopeName))
-            TAG_NEWS -> ContainerFragment.newInstance(scopeName, PostsScreen(scopeName))
+            TAG_ALBUMS -> ContainerFragment.newInstance(scopeName, tag, AlbumsScreen(scopeName))
+            TAG_USERS -> ContainerFragment.newInstance(scopeName, tag, UsersScreen(scopeName))
+            TAG_NEWS -> ContainerFragment.newInstance(scopeName, tag, PostsScreen(scopeName))
             else -> throw IllegalArgumentException("Unsupported tag $tag")
         }
     }

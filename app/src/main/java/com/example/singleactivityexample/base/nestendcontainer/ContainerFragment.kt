@@ -20,15 +20,18 @@ class ContainerFragment : Fragment(R.layout.fragment_container), BackButtonListe
     companion object {
         private const val EXTRA_SCOPE_NAME = "extra_scope_id"
         private const val EXTRA_ROOT_SCREEN = "extra_root_screen"
+        private const val EXTRA_PAGE_TAG = "extra_page_tag"
 
-        fun newInstance(scopeId: String, rootScreen: MyParcelableScreen) = ContainerFragment().apply {
+        fun newInstance(scopeId: String, pageTag: String, rootScreen: MyParcelableScreen) = ContainerFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(EXTRA_ROOT_SCREEN, rootScreen)
                 putString(EXTRA_SCOPE_NAME, scopeId)
+                putString(EXTRA_PAGE_TAG, pageTag)
             }
         }
     }
 
+    val pageTag by extraNotNull<String>(EXTRA_PAGE_TAG)
     private val scopeId by extraNotNull<String>(EXTRA_SCOPE_NAME)
     private val rootScreen by extraNotNull<MyParcelableScreen>(EXTRA_ROOT_SCREEN)
     private val scope by lazy {
