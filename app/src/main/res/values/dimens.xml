@@ -10,4 +10,6 @@
     <dimen name="comment_count_text_size">18sp</dimen>
     <dimen name="avatar_size">48dp</dimen>
 
+    <dimen name="user_avatar_size">56dp</dimen>
+
 </resources>
