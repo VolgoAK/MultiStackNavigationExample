@@ -20,6 +20,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.IFlexible
 import kotlinx.android.synthetic.main.fragment_post.*
 import kotlinx.coroutines.flow.collect
+import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -32,10 +33,12 @@ class PostFragment : Fragment(R.layout.fragment_post), FlexibleAdapter.OnItemCli
 
     companion object {
         private const val EXTRA_POST = "extra_post"
+        private const val EXTRA_SCOPE_ID = "extra_scope_id"
 
-        fun newInstance(postId: Long) = PostFragment().apply {
+        fun newInstance(postId: Long, scopeId: String) = PostFragment().apply {
             arguments = Bundle().apply {
                 putLong(EXTRA_POST, postId)
+                putString(EXTRA_SCOPE_ID, scopeId)
             }
         }
     }
@@ -43,7 +46,8 @@ class PostFragment : Fragment(R.layout.fragment_post), FlexibleAdapter.OnItemCli
     private val viewModel by viewModel<PostViewModel>{
         parametersOf(getExtraNotNull(EXTRA_POST))
     }
-    private val navigator by inject<Navigator>()
+    private val scope by lazy { getKoin().getScope(getExtraNotNull(EXTRA_SCOPE_ID)) }
+    private val navigator by lazy { scope.get<Navigator>() }
 
     private val postAdapter = FlexibleAdapter(emptyList(), this)
 

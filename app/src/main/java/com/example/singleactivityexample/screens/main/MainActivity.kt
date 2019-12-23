@@ -7,6 +7,7 @@ import com.example.singleactivityexample.base.BackButtonListener
 import com.example.singleactivityexample.navigation.MyAppNavigator
 import com.example.singleactivityexample.navigation.Navigator
 import com.example.singleactivityexample.navigation.PostsScreen
+import com.example.singleactivityexample.navigation.UsersMainScreen
 import org.koin.android.ext.android.inject
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            navigator.setRootScreen(PostsScreen())
+            navigator.setRootScreen(UsersMainScreen())
         }
     }
 

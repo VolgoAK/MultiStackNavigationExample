@@ -1,4 +1,4 @@
-package com.example.singleactivityexample.screens.usermain
+package com.example.singleactivityexample.screens.main
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -8,9 +8,8 @@ import com.example.singleactivityexample.R
 import com.example.singleactivityexample.base.BackButtonListener
 import com.example.singleactivityexample.base.nestendcontainer.ContainerFragment
 import com.example.singleactivityexample.navigation.AlbumsScreen
+import com.example.singleactivityexample.navigation.PostsScreen
 import com.example.singleactivityexample.navigation.UsersScreen
-import com.example.singleactivityexample.screens.albums.AlbumsFragment
-import com.example.singleactivityexample.screens.users.UsersFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_users_main.*
 
@@ -21,7 +20,9 @@ class UsersMainFragment : Fragment(R.layout.fragment_users_main),
     companion object {
         private const val TAG_ALBUMS = "tag_albums"
         private const val TAG_USERS = "tag_users"
-        fun newInstance() = UsersMainFragment()
+        private const val TAG_NEWS = "tag_news"
+        fun newInstance() =
+            UsersMainFragment()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -29,8 +30,8 @@ class UsersMainFragment : Fragment(R.layout.fragment_users_main),
         bottomNav.setOnNavigationItemSelectedListener(this)
 
         if (savedInstanceState == null) {
-            bottomNav.selectedItemId = R.id.navigationItemUsers
-            setCurrentFragment(TAG_USERS)
+            bottomNav.selectedItemId = R.id.navigationItemPosts
+            //setCurrentFragment(TAG_NEWS)
         }
     }
 
@@ -42,6 +43,10 @@ class UsersMainFragment : Fragment(R.layout.fragment_users_main),
             }
             R.id.navigationItemAlbums -> {
                 setCurrentFragment(TAG_ALBUMS)
+                true
+            }
+            R.id.navigationItemPosts -> {
+                setCurrentFragment(TAG_NEWS)
                 true
             }
             else -> false
@@ -107,6 +112,7 @@ class UsersMainFragment : Fragment(R.layout.fragment_users_main),
         return when (tag) {
             TAG_ALBUMS -> ContainerFragment.newInstance(scopeName, AlbumsScreen(scopeName))
             TAG_USERS -> ContainerFragment.newInstance(scopeName, UsersScreen(scopeName))
+            TAG_NEWS -> ContainerFragment.newInstance(scopeName, PostsScreen(scopeName))
             else -> throw IllegalArgumentException("Unsupported tag $tag")
         }
     }

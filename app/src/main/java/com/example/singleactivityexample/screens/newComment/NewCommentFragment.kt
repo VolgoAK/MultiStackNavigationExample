@@ -17,7 +17,8 @@ class NewCommentFragment : Fragment(R.layout.fragment_new_comment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         btDone.setOnClickListener {
-            navigator.backTo(PostsScreen())
+            //todo how to ignore params for back to
+            navigator.backTo(PostsScreen(""))
         }
     }
 }

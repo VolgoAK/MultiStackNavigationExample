@@ -1,18 +1,15 @@
 package com.example.singleactivityexample.navigation
 
 import android.os.Parcelable
-import androidx.fragment.app.Fragment
 import com.example.singleactivityexample.screens.album.AlbumFragment
 import com.example.singleactivityexample.screens.albums.AlbumsFragment
 import com.example.singleactivityexample.screens.newComment.NewCommentFragment
 import com.example.singleactivityexample.screens.post.PostFragment
 import com.example.singleactivityexample.screens.posts.PostsFragment
 import com.example.singleactivityexample.screens.user.UserFragment
-import com.example.singleactivityexample.screens.usermain.UsersMainFragment
+import com.example.singleactivityexample.screens.main.UsersMainFragment
 import com.example.singleactivityexample.screens.users.UsersFragment
 import kotlinx.android.parcel.Parcelize
-import org.koin.core.scope.ScopeID
-import timber.log.Timber
 
 sealed class MyAppScreen : CustomSupportScreen() {
     fun withFadeInOutAnimation(): MyAppScreen {
@@ -25,13 +22,14 @@ sealed class MyAppScreen : CustomSupportScreen() {
 }
 
 sealed class MyParcelableScreen: MyAppScreen(), Parcelable
-
-class PostsScreen : MyAppScreen() {
-    override fun createFragment() = PostsFragment()
+@Parcelize
+class PostsScreen(val scopeId: String) : MyParcelableScreen() {
+    override fun createFragment() = PostsFragment.newInstance(scopeId)
 }
 
-class PostScreen(private val postId: Long) : MyAppScreen() {
-    override fun createFragment() = PostFragment.newInstance(postId)
+class PostScreen(private val postId: Long,
+                 private val scopeId: String) : MyAppScreen() {
+    override fun createFragment() = PostFragment.newInstance(postId, scopeId)
 }
 
 class WriteCommentScreen() : MyAppScreen() {
