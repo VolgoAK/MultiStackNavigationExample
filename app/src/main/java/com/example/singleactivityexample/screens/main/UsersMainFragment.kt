@@ -8,13 +8,13 @@ import androidx.fragment.app.Fragment
 import com.example.singleactivityexample.R
 import com.example.singleactivityexample.base.BackButtonListener
 import com.example.singleactivityexample.base.nestendcontainer.ContainerFragment
+import com.example.singleactivityexample.di.containerModule
 import com.example.singleactivityexample.navigation.AlbumsScreen
 import com.example.singleactivityexample.navigation.PostsScreen
 import com.example.singleactivityexample.navigation.UsersScreen
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_users_main.*
-import timber.log.Timber
+import org.koin.core.context.loadKoinModules
 
 class UsersMainFragment : Fragment(R.layout.fragment_users_main),
     BottomNavigationView.OnNavigationItemSelectedListener,
@@ -34,7 +34,6 @@ class UsersMainFragment : Fragment(R.layout.fragment_users_main),
 
         if (savedInstanceState == null) {
             bottomNav.selectedItemId = R.id.navigationItemPosts
-            //setCurrentFragment(TAG_NEWS)
         }
     }
 
@@ -78,9 +77,6 @@ class UsersMainFragment : Fragment(R.layout.fragment_users_main),
         transaction.commitNow()
     }
 
-    // todo shit from the cicerone example won't work 
-    // we have many fragments with same container id, and fragment manager will just return us 
-    // first in a list
     override fun onBackPressed(): Boolean {
         return getVisibleContainerFragment()?.onBackPressed() ?: false || popMainStack()
     }

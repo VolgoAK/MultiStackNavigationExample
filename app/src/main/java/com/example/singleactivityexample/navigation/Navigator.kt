@@ -1,6 +1,7 @@
 package com.example.singleactivityexample.navigation
 
 import ru.terrakok.cicerone.Cicerone
+import timber.log.Timber
 
 class Navigator {
     private val cicerone by lazy { Cicerone.create() }

@@ -7,18 +7,16 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.singleactivityexample.R
 import com.example.singleactivityexample.extensions.extraNotNull
-import com.example.singleactivityexample.extensions.getExtraNotNull
 import com.example.singleactivityexample.extensions.observeSafe
 import com.example.singleactivityexample.extensions.toast
 import com.example.singleactivityexample.navigation.Navigator
 import com.example.singleactivityexample.navigation.PostScreen
-import com.example.singleactivityexample.navigation.UsersMainScreen
 import com.example.singleactivityexample.screens.posts.adapter.PostItem
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import kotlinx.android.synthetic.main.fragment_posts.*
 import org.koin.android.ext.android.getKoin
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 /**
  * A simple [Fragment] subclass.
@@ -35,9 +33,9 @@ class PostsFragment : Fragment(R.layout.fragment_posts), FlexibleAdapter.OnItemC
     }
 
     private val scopeId by extraNotNull<String>(EXTRA_SCOPE_ID)
-    private val scope by lazy{ getKoin().getScope(scopeId)}
+    private val scope by lazy { getKoin().getScope(scopeId) }
+    private val navigator by lazy { scope.get<Navigator>() }
     private val viewModel by viewModel<PostsViewModel>()
-    private val navigator by lazy{ scope.get<Navigator>()}
     private val adapter = FlexibleAdapter(emptyList(), this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
