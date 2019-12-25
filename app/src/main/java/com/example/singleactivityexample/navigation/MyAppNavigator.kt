@@ -1,5 +1,6 @@
 package com.example.singleactivityexample.navigation
 
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -23,6 +24,15 @@ open class MyAppNavigator : SupportAppNavigator{
             fragmentTransaction?.setCustomAnimations(
                 anim.enter, anim.exit, anim.popEnter, anim.popExit
             )
+        }
+
+        val sourceSharedElement = nextFragment?.getExtra<String>(CustomSupportScreen.ARG_SHARED_TRANSITION_NAME_SOURCE)
+        val destSharedElement = nextFragment?.getExtra<String>(CustomSupportScreen.ARG_SHARED_TRANSITION_NAME_DEST)
+
+        if(sourceSharedElement != null && destSharedElement != null) {
+            val view = FrameLayout(currentFragment!!.requireContext())
+            view.transitionName = sourceSharedElement
+            fragmentTransaction?.addSharedElement(view, destSharedElement)
         }
     }
 }

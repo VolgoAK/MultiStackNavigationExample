@@ -11,6 +11,7 @@ import com.example.singleactivityexample.extensions.observeSafe
 import com.example.singleactivityexample.navigation.Navigator
 import com.example.singleactivityexample.navigation.UserScreen
 import com.example.singleactivityexample.screens.users.adapter.UserItem
+import com.example.singleactivityexample.utils.getImageTag
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import kotlinx.android.synthetic.main.fragment_users.*
 import org.koin.android.ext.android.getKoin
@@ -66,7 +67,7 @@ class UsersFragment : Fragment(R.layout.fragment_users), FlexibleAdapter.OnItemC
     override fun onItemClick(view: View?, position: Int): Boolean {
         return when (val item = adapter.getItem(position)) {
             is UserItem -> {
-                navigator.navigateTo(UserScreen())
+                navigator.navigateTo(UserScreen(item.user, item.user.getImageTag()))
                 true
             }
             else -> false

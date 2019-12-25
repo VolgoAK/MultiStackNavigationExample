@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.singleactivityexample.R
 import com.example.singleactivityexample.extensions.getExtraNotNull
 import com.example.singleactivityexample.extensions.observeSafe
@@ -34,6 +35,8 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums), FlexibleAdapter.OnIte
     private val scope by lazy { getKoin().getScope(getExtraNotNull(EXTRA_SCOPE_ID)) }
     private val navigator by lazy { scope.get<Navigator>() }
 
+    private val photosPool = RecyclerView.RecycledViewPool()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(rvAlbums) {
@@ -48,7 +51,7 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums), FlexibleAdapter.OnIte
         progress.setVisibility(state.loading)
 
         albumsAdapter.updateDataSet(
-            state.albums.map { ItemAlbum(it) }
+            state.albums.map { ItemAlbum(it, emptyList(), null, photosPool) }
         )
 
         state.error?.let { requireContext().toast(it) }

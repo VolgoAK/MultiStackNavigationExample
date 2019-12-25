@@ -13,3 +13,5 @@ private val images = listOf(
 )
 
 fun User.getImage() = images[abs(this.hashCode()) % images.size]
+
+fun User.getImageTag() = "userImage${this.hashCode()}"

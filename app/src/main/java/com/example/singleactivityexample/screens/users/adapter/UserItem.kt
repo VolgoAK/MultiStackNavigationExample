@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.example.singleactivityexample.R
 import com.example.singleactivityexample.model.User
 import com.example.singleactivityexample.utils.getImage
+import com.example.singleactivityexample.utils.getImageTag
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
@@ -25,6 +26,7 @@ class UserItem(val user: User) : AbstractFlexibleItem<UserItem.ViewHolder>() {
         with(holder) {
             tvName.text = user.name
             tvNickname.text = user.username
+            ivAvatar.transitionName = user.getImageTag()
             Glide.with(itemView)
                 .load(user.getImage())
                 .into(ivAvatar)

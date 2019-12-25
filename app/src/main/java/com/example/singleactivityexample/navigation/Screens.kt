@@ -1,6 +1,7 @@
 package com.example.singleactivityexample.navigation
 
 import android.os.Parcelable
+import com.example.singleactivityexample.model.User
 import com.example.singleactivityexample.screens.album.AlbumFragment
 import com.example.singleactivityexample.screens.albums.AlbumsFragment
 import com.example.singleactivityexample.screens.newComment.NewCommentFragment
@@ -51,8 +52,13 @@ class UsersMainScreen(): MyAppScreen() {
 }
 
 @Parcelize
-class UserScreen(): MyParcelableScreen() {
-    override fun createFragment() = UserFragment()
+class UserScreen(val user: User, val sharedElementName: String?): MyParcelableScreen() {
+
+    init {
+        if(sharedElementName != null) withSharedElement(sharedElementName, sharedElementName)
+    }
+
+    override fun createFragment() = UserFragment.newInstance(user, sharedElementName)
 }
 
 @Parcelize
