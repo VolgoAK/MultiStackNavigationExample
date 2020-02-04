@@ -1,9 +1,6 @@
 package com.example.singleactivityexample.domain
 
-import com.example.singleactivityexample.model.Album
-import com.example.singleactivityexample.model.Comment
-import com.example.singleactivityexample.model.Post
-import com.example.singleactivityexample.model.User
+import com.example.singleactivityexample.model.*
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -27,4 +24,7 @@ interface NewsApi {
 
     @GET(value = "albums")
     suspend fun getAllAlbums(): List<Album>
+
+    @GET(value = "photos")
+    suspend fun getPhotosByAlbumId(@Query("albumId") id: Long): List<Photo>
 }

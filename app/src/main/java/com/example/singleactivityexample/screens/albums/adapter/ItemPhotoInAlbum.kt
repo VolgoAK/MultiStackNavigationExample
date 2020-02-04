@@ -5,6 +5,8 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.singleactivityexample.R
+import com.example.singleactivityexample.extensions.makeGone
+import com.example.singleactivityexample.extensions.makeVisible
 import com.example.singleactivityexample.model.Photo
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -22,10 +24,12 @@ class ItemPhotoInAlbum(var photo: Photo?) : AbstractFlexibleItem<ItemPhotoInAlbu
         payloads: MutableList<Any>
     ) {
         photo?.let {
+            holder.progress.makeGone()
             Glide.with(holder.itemView)
-                .load(photo)
+                .load(it.thumbnailUrl)
                 .into(holder.ivPhoto)
         } ?: run {
+            holder.progress.makeVisible()
             holder.ivPhoto.setImageResource(R.drawable.background_gray)
         }
     }
@@ -42,5 +46,6 @@ class ItemPhotoInAlbum(var photo: Photo?) : AbstractFlexibleItem<ItemPhotoInAlbu
     class ViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<RecyclerView.ViewHolder>>?) :
         FlexibleViewHolder(view, adapter) {
         val ivPhoto = view.ivPhoto
+        val progress = view.progress
     }
 }

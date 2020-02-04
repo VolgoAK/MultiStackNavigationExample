@@ -13,10 +13,7 @@ class PostsViewModel(
     private val api: NewsRepository
 ) : ViewModel() {
 
-    private val refreshLiveData = MutableLiveData<Boolean>().apply {
-        value = true
-    }
-
+    private val refreshLiveData = MutableLiveData<Boolean>()
     private val postsLoadingLiveData = refreshLiveData.switchMap {
         flow { emit(api.getAllPosts()) }
             .map<List<Post>, PostsScreenPartialState> {
@@ -27,6 +24,14 @@ class PostsViewModel(
             .catch { emit(PostsScreenPartialState.ErrorState(it.message ?: "error")) }
             .asLiveData()
     }
+
+    val flow = flow { emit(api.getAllPosts()) }
+        .map<List<Post>, PostsScreenPartialState> {
+            PostsScreenPartialState.PostsLoadedState(it)
+                .chain(PostsScreenPartialState.LoadingState(false))
+        }
+        .onStart { emit(PostsScreenPartialState.LoadingState(true)) }
+        .catch { emit(PostsScreenPartialState.ErrorState(it.message ?: "error")) }
 
     private val state = PostsScreenState()
     val stateLiveData = Transformations.map(postsLoadingLiveData) {

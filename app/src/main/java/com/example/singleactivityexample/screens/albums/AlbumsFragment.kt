@@ -3,6 +3,7 @@ package com.example.singleactivityexample.screens.albums
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.singleactivityexample.R
@@ -15,8 +16,14 @@ import com.example.singleactivityexample.navigation.Navigator
 import com.example.singleactivityexample.screens.albums.adapter.ItemAlbum
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import kotlinx.android.synthetic.main.fragment_albums.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.getKoin
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.ldralighieri.corbind.recyclerview.flingEvents
+import ru.ldralighieri.corbind.recyclerview.scrollEvents
+import ru.ldralighieri.corbind.recyclerview.scrollStateChanges
+import timber.log.Timber
 
 class AlbumsFragment : Fragment(R.layout.fragment_albums), FlexibleAdapter.OnItemClickListener {
 
@@ -42,6 +49,13 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums), FlexibleAdapter.OnIte
         with(rvAlbums) {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = albumsAdapter
+            scrollEvents()
+                .onEach {
+                    val lm = layoutManager as LinearLayoutManager
+                    val latestVisible = lm.findLastVisibleItemPosition()
+                    viewModel.onAlbumVisible(latestVisible)
+                }.launchIn(lifecycleScope)
+
         }
 
         viewModel.stateLiveData.observeSafe(viewLifecycleOwner, ::onNewState)
@@ -51,7 +65,7 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums), FlexibleAdapter.OnIte
         progress.setVisibility(state.loading)
 
         albumsAdapter.updateDataSet(
-            state.albums.map { ItemAlbum(it, emptyList(), null, photosPool) }
+            state.albums.map { ItemAlbum(it.album, it.photos, it.user, photosPool) }
         )
 
         state.error?.let { requireContext().toast(it) }
